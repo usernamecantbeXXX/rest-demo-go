@@ -26,14 +26,7 @@ var tasks []Task = []Task{}
 func main() {
 	initLogFile()
 
-	jsonFile, err := os.Open("tasks.json")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened tasks.json")
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	_ = json.Unmarshal([]byte(byteValue), &tasks)
+	tasks = initJsonFile(tasks)
 
 	log.Println("Starting the HTTP server on port 8080")
 
@@ -42,12 +35,24 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
+func initJsonFile(tasks []Task) []Task {
+	jsonFile, err := os.Open("tasks.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Successfully Opened tasks.json")
+	defer jsonFile.Close()
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	_ = json.Unmarshal([]byte(byteValue), &tasks)
+	return tasks
+}
+
 func initHandlers(router *mux.Router) {
-	router.HandleFunc("/tasks/{id}", retrieveTask).Methods("GET")
-	router.HandleFunc("/tasks", retrieveTask).Methods("GET")
-	router.HandleFunc("/tasks", addTask).Methods("POST")
-	router.HandleFunc("/tasks/{id}", updateTask).Methods("PUT")
-	router.HandleFunc("/tasks/{id}", deleteTask).Methods("DELETE")
+	router.HandleFunc("/tasks/{id}", retrieveTaskHandler).Methods("GET")
+	router.HandleFunc("/tasks", retrieveTaskHandler).Methods("GET")
+	router.HandleFunc("/tasks", addTaskHandler).Methods("POST")
+	router.HandleFunc("/tasks/{id}", updateTaskHandler).Methods("PUT")
+	router.HandleFunc("/tasks/{id}", deleteTaskHandler).Methods("DELETE")
 }
 
 func initLogFile() {
@@ -63,7 +68,8 @@ func initLogFile() {
 	return
 }
 
-func retrieveTask(w http.ResponseWriter, r *http.Request) {
+func retrieveTaskHandler(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Set("Content-Type", "application/json")
 	var idParam string = mux.Vars(r)["id"]
 
@@ -104,12 +110,11 @@ func retrieveTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	task := tasks[id]
-	//w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(task)
 	log.Println("getTask", task)
 }
 
-func addTask(w http.ResponseWriter, r *http.Request) {
+func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var newTask Task
 	json.NewDecoder(r.Body).Decode(&newTask)
 	newTask.Id = tasks[len(tasks)-1].Id + 1
@@ -125,7 +130,7 @@ func addTask(w http.ResponseWriter, r *http.Request) {
 	log.Println("create: ", newTask)
 }
 
-func updateTask(w http.ResponseWriter, r *http.Request) {
+func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// get the ID of the task from the route parameters
 	var idParam string = mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idParam)
@@ -161,7 +166,7 @@ func updateTask(w http.ResponseWriter, r *http.Request) {
 	log.Println("update: ", updatedTask)
 }
 
-func deleteTask(w http.ResponseWriter, r *http.Request) {
+func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// get the ID of the task from the route parameters
 	var idParam string = mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idParam)
