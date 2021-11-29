@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### tasks delete
-DELETE http://127.0.0.1:8080/tasks/10
+DELETE http://127.0.0.1:8080/tasks/11
 
 ### tasks list
 GET http://127.0.0.1:8080/tasks/

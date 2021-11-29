@@ -1,12 +1,17 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
-func Test_addTaskHandler(t *testing.T) {
+// Get All Tasks
+func Test_retrieveTaskHandler(t *testing.T) {
 	req, err := http.NewRequest("GET", "/tasks", nil)
 
 	if err != nil {
@@ -20,68 +25,63 @@ func Test_addTaskHandler(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
-	//expected, _ := json.Marshal(tasks)
-	expected := `[{"id":1,"title":"write some code","dueDate":"18/11/2021","status":"done"},{"id":2,"title":"write some code 2","dueDate":"29/11/2021","status":"todo"},{"id":3,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":4,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":5,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":6,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":7,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":8,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":9,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":10,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":11,"title":"content","dueDate":"17/11/2021","status":"done"}]`
-	//println("sssssssssssssssssssssssssssss",string(expected))
-	//if err != nil {
-	//	return
-	//}
-	println("rr.Body.String()", rr.Body.String())
-	println("string(expected)", string(expected))
-	println(rr.Body.String() == string(expected))
-	if rr.Body.String() != string(expected) {
+	expected, _ := json.Marshal(tasks)
+
+	if strings.Replace(rr.Body.String(), "\n", "", -1) != string(expected) {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), string(expected))
 	}
 }
 
-func Test_deleteTaskHandler(t *testing.T) {
-	type args struct {
-		w http.ResponseWriter
-		r *http.Request
+// Get Tasks Expired List
+func Test_retrieveExpiredTaskHandler(t *testing.T) {
+	req, err := http.NewRequest("GET", "/tasks", nil)
+
+	if err != nil {
+		t.Fatal(err)
 	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
+	q := req.URL.Query()
+	q.Add("expiredToday", "--expiring-today")
+	req.URL.RawQuery = q.Encode()
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(retrieveTaskHandler)
+	tasks = initJsonFile(tasks)
+	handler.ServeHTTP(rr, req)
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-		})
+	expected := `{"id":2,"title":"write some code 2","dueDate":"29/11/2021","status":"todo"}`
+
+	if strings.Replace(rr.Body.String(), "\n", "", -1) != string(expected) {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body.String(), string(expected))
 	}
 }
 
-func Test_retrieveTaskHandler(t *testing.T) {
-	type args struct {
-		w http.ResponseWriter
-		r *http.Request
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-		})
-	}
+func Test_addTaskHandler(t *testing.T) {
+
+}
+
+func Test_deleteTaskHandler(t *testing.T) {
+	//id := 11
+
+	url := "http://localhost:8080/tasks/1"
+
+	req, _ := http.NewRequest("DELETE", url, nil)
+
+	req.Header.Add("cache-control", "no-cache")
+	req.Header.Add("postman-token", "d02d64ae-fb37-8604-5170-b1ddbf870a64")
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	fmt.Println(res)
+	fmt.Println(string(body))
 }
 
 func Test_updateTaskHandler(t *testing.T) {
-	type args struct {
-		w http.ResponseWriter
-		r *http.Request
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-		})
-	}
+
 }
