@@ -29,6 +29,27 @@ go build
 ```
 ./unit-test.sh
 ```
+Test result is as below:
+```shell
+ubuntu@nmt:~/GolandProjects/rest-demo-go$ ./unit-test.sh 
+{"id":2,"title":"create write code test put","dueDate":"21/08/2019","status":"todo"}
+get_one_http_code:200
+
+{"id":15,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"}
+post_http_code:200
+
+[{"id":1,"title":"write some code","dueDate":"18/11/2021","status":"done"},{"id":2,"title":"create write code test put","dueDate":"21/08/2019","status":"todo"},{"id":3,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":4,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":5,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":6,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":7,"title":"content","dueDate":"17/11/2021","status":"3"},{"id":8,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":9,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":10,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":11,"title":"content","dueDate":"17/11/2021","status":"done"},{"id":12,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"},{"id":13,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"},{"id":14,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"},{"id":15,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"}]
+get_all_http_code:200
+
+[{"id":12,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"},{"id":13,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"},{"id":14,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"},{"id":15,"title":"create write code test post","dueDate":"06/12/2021","status":"todo"}]
+get_exp_http_code:200
+
+{"id":2,"title":"create write code test put","dueDate":"21/08/2019","status":"todo"}
+put_http_code:200
+
+delete_http_code:200
+
+```
 
 ## 3. Call the API Command Line
 
