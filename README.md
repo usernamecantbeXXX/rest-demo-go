@@ -41,7 +41,7 @@ sh ./tasks.sh add "curl add" "17/11/2021" "todo"
 sh ./tasks.sh done 3 "curl put" "18/11/2021" "done"
 
 # DELETE
-sh ./tasks.sh delete 14
+sh ./tasks.sh delete 15
 
 ```
 
