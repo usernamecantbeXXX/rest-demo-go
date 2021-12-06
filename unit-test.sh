@@ -1,29 +1,41 @@
 #!/bin/sh
 
-curl --request GET \
+# Test GET, get one task
+curl -X GET \
   --url http://localhost:8080/tasks/1 \
-  --header 'cache-control: no-cache' \
+  -H 'cache-control: no-cache' \
+  -w "\n get_one_http_code:%{http_code}\n"
 
-curl --request GET \
+# Test POST, create one task
+curl -X POST \
   --url http://localhost:8080/tasks \
-  --header 'cache-control: no-cache' \
-  --header 'content-type: application/json' \
-  --data '{\n	"title": "create write code",\n	"dueDate": "21/08/2019",\n	"status": "todo"\n}'
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -w "\n post_http_code:%{http_code}\n" \
+  -d '{"title":"create write code test post","dueDate":"06/12/2021","status":"todo"}'
 
-curl --request GET \
+# Test GET, get all task
+curl -X GET \
+  --url 'http://localhost:8080/tasks' \
+  -H 'cache-control: no-cache' \
+  -w "\n get_all_http_code:%{http_code}\n"
+
+# Test GET, get expiring task
+curl -X GET \
   --url 'http://localhost:8080/tasks?expiredToday=--expiring-today' \
-  --header 'cache-control: no-cache' \
-  --header 'content-type: application/json' \
-  --header 'postman-token: 1bf97590-0581-0982-e870-5b50aa3c24fc' \
-  --data '{\n	"title": "create write code",\n	"dueDate": "21/08/2019",\n	"status": "todo"\n}'
+  -H 'cache-control: no-cache' \
+  -w "\n get_exp_http_code:%{http_code}\n"
 
-curl --request PUT \
+# Test PUT, modify one task
+curl -X PUT \
   --url http://localhost:8080/tasks \
-  --header 'cache-control: no-cache' \
-  --header 'content-type: application/json' \
-  --header 'postman-token: a8b2a4ba-1c70-9309-83a3-61f39ec99b09' \
-  --data '{\n	"id": "2",\n	"title": "put write code",\n	"dueDate": "21/08/2019",\n	"status": "done"\n}'
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -w "\n put_http_code:%{http_code}\n" \
+  -d '{"id": 2,"title":"create write code test put","dueDate":"21/08/2019","status":"todo"}'
 
-curl --request DELETE \
-  --url http://localhost:8080/tasks/1 \
-  --header 'cache-control: no-cache' \
+# Test DELETE, delete one task
+curl -X DELETE \
+  --url http://localhost:8080/tasks/12 \
+  -H 'cache-control: no-cache' \
+  -w "\n delete_http_code:%{http_code}\n"

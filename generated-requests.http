@@ -4,12 +4,12 @@ Content-Type: application/json
 
 {
   "title": "content",
-  "dueDate": "17/11/2021",
+  "dueDate": "26/12/2021",
   "status": "done"
 }
 
 ### tasks done 3
-PUT http://127.0.0.1:8080/tasks/3
+PUT http://127.0.0.1:8080/tasks
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### tasks delete
-DELETE http://127.0.0.1:8080/tasks/11
+DELETE http://127.0.0.1:8080/tasks/15
 
 ### tasks list
 GET http://127.0.0.1:8080/tasks/

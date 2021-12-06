@@ -51,10 +51,11 @@ func initHandlers(router *mux.Router) {
 	router.HandleFunc("/tasks/{id}", retrieveTaskHandler).Methods("GET")
 	router.HandleFunc("/tasks", retrieveTaskHandler).Methods("GET")
 	router.HandleFunc("/tasks", addTaskHandler).Methods("POST")
-	router.HandleFunc("/tasks/{id}", updateTaskHandler).Methods("PUT")
+	router.HandleFunc("/tasks", updateTaskHandler).Methods("PUT")
 	router.HandleFunc("/tasks/{id}", deleteTaskHandler).Methods("DELETE")
 }
 
+// Init JSON File as database
 func initLogFile() {
 	file := "./" + "log" + ".out"
 	logFile, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
@@ -68,6 +69,7 @@ func initLogFile() {
 	return
 }
 
+//Restful API GET，Retrieve one / all / expiring tasks
 func retrieveTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
@@ -99,6 +101,7 @@ func retrieveTaskHandler(w http.ResponseWriter, r *http.Request) {
 		// there was an error
 		w.WriteHeader(400)
 		w.Write([]byte("ID could not be converted to integer"))
+		log.Println("ID could not be converted to integer")
 		return
 	}
 
@@ -106,6 +109,7 @@ func retrieveTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if id >= len(tasks) {
 		w.WriteHeader(404)
 		w.Write([]byte("No task found with specified ID"))
+		log.Println("No task found with specified ID")
 		return
 	}
 
@@ -114,6 +118,7 @@ func retrieveTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("getTask", task)
 }
 
+//Restful API POST，create one task
 func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var newTask Task
 	json.NewDecoder(r.Body).Decode(&newTask)
@@ -130,26 +135,25 @@ func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("create: ", newTask)
 }
 
+//Restful API PUT，update one task
 func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
-	// get the ID of the task from the route parameters
-	var idParam string = mux.Vars(r)["id"]
-	id, err := strconv.Atoi(idParam)
-	if err != nil {
+	// get the ID of the task from JSON body
+	var updatedTask Task
+	json.NewDecoder(r.Body).Decode(&updatedTask)
+	id := updatedTask.Id
+	if 0 >= id {
 		w.WriteHeader(400)
 		w.Write([]byte("ID could not be converted to integer"))
+		log.Println("ID could not be converted to integer")
 		return
 	}
 
-	// error checking
 	if id >= len(tasks) {
 		w.WriteHeader(404)
 		w.Write([]byte("No task found with specified ID"))
+		log.Println("No task found with specified ID")
 		return
 	}
-
-	// get the value from JSON body
-	var updatedTask Task
-	json.NewDecoder(r.Body).Decode(&updatedTask)
 
 	for i, t := range tasks {
 		if t.Id == updatedTask.Id {
@@ -166,6 +170,7 @@ func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("update: ", updatedTask)
 }
 
+//Restful API DELETE，delete one task
 func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	// get the ID of the task from the route parameters
 	var idParam string = mux.Vars(r)["id"]
@@ -173,6 +178,7 @@ func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("ID could not be converted to integer"))
+		log.Println("ID could not be converted to integer")
 		return
 	}
 
