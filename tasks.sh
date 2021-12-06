@@ -29,7 +29,7 @@ elif [ "$1" = "done" ];then
       exit 2
   fi
 
-  curl -X PUT -H "Content-Type: application/json" -d '{"id":"'"${2}"'","title":"'"${3}"'","dueDate":"'"${4}"'","status":"'"${5}"'"}' "http://$host:$port/tasks"
+  curl -X PUT -H "Content-Type: application/json" -d '{"id":'${2}',"title":"'"${3}"'","dueDate":"'"${4}"'","status":"'"${5}"'"}' "http://$host:$port/tasks"
   echo "update "
   exit 0
 

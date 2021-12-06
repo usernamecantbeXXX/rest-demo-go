@@ -4,7 +4,17 @@
 
 ## 1. Build and Package From Source code
 
+### 1.1 Run with Script
+
+```
+sh ./start.sh
+sh ./stop.sh
+sh ./restart.sh
+```
+
 ### 1.1 Compile and Run
+
+Compile and run the poject without script
 
 ```
 sudo git clone https://github.com/usernamecantbeXXX/rest-demo-go.git
@@ -13,14 +23,6 @@ cd rest-demo-go/
 
 go build
 ./rest-demo-go
-```
-
-### 1.2 Run with Script
-
-```
-sh ./start.sh
-sh ./stop.sh
-sh ./restart.sh
 ```
 
 ## 3. Call the API Command Line
@@ -36,10 +38,10 @@ sh ./tasks.sh list --expiring-today
 sh ./tasks.sh add "curl add" "17/11/2021" "todo"
 
 # PUT 
-sh ./tasks.sh done "3" "curl put" "18/11/2021" "done"
+sh ./tasks.sh done 3 "curl put" "18/11/2021" "done"
 
 # DELETE
-sh ./tasks.sh delete "27" 
+sh ./tasks.sh delete 14
 
 ```
 
