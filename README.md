@@ -2,23 +2,27 @@
 
 # Restful API Demo
 
-## 1. Directly Run
-I have prepared a [tar.gz](https://raw.githubusercontent.com/usernamecantbeXXX/rest_demo/master/rest.tar.gz) file included the jar compiled and scripts.
+## 1. Build and Package From Source code
 
-Extract the tar.gz file, run the `start.sh` to start the web application at 8080 port. The port can be changed in the `application.properties` file.
+### 1.1 Compile and Run
 
 ```
-tar -zxvf rest.tar.gz
-cd rest
-sh ./start.sh 
+sudo git clone https://github.com/usernamecantbeXXX/rest-demo-go.git
+cd rest-demo-go/
+# export GOPROXY=https://goproxy.cn,direct
+
+go build
+./rest-demo-go
 ```
 
-Then we can see the information as below if the app have been started successfully.
+### 1.2 Run with Script
+
 ```
-ubuntu@nmt:/opt/webapps/rest_demo/target$ sudo sh ./start.sh 
-Service  start ...
-Service  start SUCCESS
+sh ./start.sh
+sh ./stop.sh
+sh ./restart.sh
 ```
+
 ## 3. Call the API Command Line
 
 After start the app, call the API with Command Line mode As Below：
@@ -39,32 +43,13 @@ sh ./tasks.sh delete "27"
 
 ```
 
-## 3. Build and Package From Source code
-
-### 3.1 Compile
-```
-sudo mkdir /opt/webapps && cd /opt/webapps
-sudo git clone http://gitlab.admin.bluemoon.com.cn/xuxianxue/rest_demo.git
-cd ./rest_demo
-sudo mvn clean package --settings ./settings.xml
-```
-
-### 3.2 Run with Script
-
-```
- cd ./target
- sudo sh ./start.sh
- sudo sh ./stop.sh
- sudo sh ./restart.sh
-```
-
 ## 4. API Overview
 
 | Method | HTTP Requests         | Returns          | Command                                 |
 | ------ | --------------------- | ---------------- | --------------------------------------- |
-| create | `POST /tasks`         | `SUCCESS/FAILED` | tasks add "write some code" 21/08/2019  |
-| update | `PUT /tasks`          | `SUCCESS/FAILED` | tasks done 3                            |
-| delete | `DELETE /tasks/${id}` | `SUCCESS/FAILED` | tasks delete 3                          |
+| create | `POST /tasks`         | Created Task     | tasks add "write some code" 21/08/2019  |
+| update | `PUT /tasks`          | Updated Task     | tasks done 3                            |
+| delete | `DELETE /tasks/${id}` | Responce Code    | tasks delete 3                          |
 | list   | `GET /tasks`          | A Task List      | tasks list /tasks list --expiring-today |
 
 ![HTTP Requests](https://raw.githubusercontent.com/usernamecantbeXXX/rest_demo/master/http_request.png)
@@ -94,8 +79,3 @@ xxx@XXX:/mnt/d/xxx/GolandProjects/rest-demo-go$
 └── unit-test.sh    # unit Test
 
 ```
-
-
-
-## Build and Run
-go get -u github.com/gorilla/mux
