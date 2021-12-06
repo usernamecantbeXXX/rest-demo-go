@@ -25,6 +25,11 @@ go build
 ./rest-demo-go
 ```
 
+## 2. unit test
+```
+./unit-test.sh
+```
+
 ## 3. Call the API Command Line
 
 After start the app, call the API with Command Line mode As Below：
@@ -54,16 +59,12 @@ sh ./tasks.sh delete 15
 | delete | `DELETE /tasks/${id}` | Responce Code    | tasks delete 3                          |
 | list   | `GET /tasks`          | A Task List      | tasks list /tasks list --expiring-today |
 
-![HTTP Requests](https://raw.githubusercontent.com/usernamecantbeXXX/rest_demo/master/http_request.png)
-
 ## 5. Architecture
 
 ### 5.1 Technical Stacks
 
 - Go 1.16
 - mux
-
-![SQLite DB](https://raw.githubusercontent.com/usernamecantbeXXX/rest_demo/master/sqlite_db.png)
 
 ### 5.2 Files Description
 
